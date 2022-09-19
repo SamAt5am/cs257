@@ -1,2 +1,20 @@
-SYNOPSIS
+						books.py Manual
 
+NAME
+  python3 book.py - searches for items matching a given parameter in a .csv file. 
+  Deals with book data in the format: title, year, author
+
+SYNOPSIS
+  python3 books.py [-option] [<parameter>] 
+
+DESCRIPTION
+  Options: 
+	-dt: searches for information between two years.  Prints all information within that range. 
+	Takes two parameters <year1> <year2>.
+	-at: search author names for characters matching parameter. Print out all books matching
+	the parameters in a sorted list. Takes 1 parameter <String> 
+	-tt: search titles for any characters matching parameter. Print all books
+	Takes 1 argument <String>     
+	-help: Opens this manual file to instruct users on the proper format
+
+  Ex: python3 books.py -dt 1967 2001 
