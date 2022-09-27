@@ -58,26 +58,34 @@ class BooksDataSource:
         for row in csv_reader:
             print(row[0])
         self.Authors = []
+        self.Books = []
         for row in csv_reader:
             is_present = False
-            author = self.createAuthor(row)
-            book = self.createBook(row)
-            for other_author in self.Authors:
-                if author.__eq__(other_author):
-                    is_present = True
-            if not is_present:
-                self.Authors.append(author)
-
-        self.Books = []
+            authorList = self.createAuthor(row)
+            book = self.createBook(row, authorList)
+            self.Books.append(book)
+            for author in authorList:
+                for other_author in self.Authors:
+                    if author.__eq__(other_author):
+                        is_present = True
+                if not is_present:
+                    self.Authors.append(author)
+        self.sortAuthors(self)
         pass
 
     def authors(self, search_text=None):
+        search_result = []
+        for author in self.Authors:
+            full_name = author.given_name + ' ' + author.surname
+            if full_name.contains(search_text):
+                search_result.append(author)
+        
         ''' Returns a list of all the Author objects in this data source whose names contain
             (case-insensitively) the search text. If search_text is None, then this method
             returns all of the Author objects. In either case, the returned list is sorted
             by surname, breaking ties using given name (e.g. Ann Brontë comes before Charlotte Brontë).
         '''
-        return []
+        return search_result
 
     def books(self, search_text=None, sort_by='title'):
         ''' Returns a list of all the Book objects in this data source whose
@@ -91,7 +99,17 @@ class BooksDataSource:
                 default -- same as 'title' (that is, if sort_by is anything other than 'year'
                             or 'title', just do the same thing you would do for 'title')
         '''
-        return []
+        search_result = []
+        for book in self.Books:
+            if book.title.contains(search_text):
+                search_result.append(book)
+
+        if search_text == 'year':
+            search_result = self.sort_books_year(search_result)
+        else:
+            search_result = self.sort_books_title(search_result)
+
+        return search_result
 
     def books_between_years(self, start_year=None, end_year=None):
         ''' Returns a list of all the Book objects in this data source whose publication
@@ -104,13 +122,21 @@ class BooksDataSource:
             during start_year should be included. If both are None, then all books
             should be included.
         '''
-        return []
+        results = []
+        if start_year == None: 
+            start_year = -10000000
+        if end_year == None:
+            end_year = 1000000000
+        bookList = self.sort_books_year(self.Books)
+        for book in bookList:
+            if book.year >= start_year and book.year <= end_year:
+                results.append(book)
+        return results
     
-    def searchList(self, datalist, parameter):
-        return[]
     def createAuthor(self, row):
         name_string = row[2]
         mult_authors = name_string.split(' and ')
+        authorList = []
         for name in mult_authors:
             name_list = name.split(' ')
             surname = name_list[len(name_list) - 2]
@@ -127,13 +153,70 @@ class BooksDataSource:
             if year_list[1] != '':
                 death_year = year_list[1]
             author = Author(surname,given_name,birth_year,death_year)
-        return author
+            authorList.append(author)
 
-    def createBook(self, row):
+        return authorList
+
+    def createBook(self, row, author):
         title = row[0]
         publish_year = row[1]
+        authors = author
 
-        book = Book(title, publish_year, [])
+        book = Book(title, publish_year, authors)
+    
+    def sortAuthors(self):
+        n = 0
+        while n < len(self.Authors)-1:
+            l = n+1
+            while l < len(self.Authors):
+                name1 = self.Authors[n].surname
+                name2 = self.Authors[l].surname
+                if  name1 == name2:
+                    name1 = self.Authors[n].given_name
+                    name2 = self.Authors[l].given_name 
+                if name1 > name2:
+                    temp = self.Authors[n]
+                    self.Authors[n] = self.Authors[l]
+                    self.Authors[l] = temp
+                l+=1
+            n+=1
+    
+    def sort_books_title(self, book_list):
+        n = 0
+        while n < len(book_list) -1:
+            l = n+1
+            while l < len(book_list):
+                title1 = book_list[n].title
+                title2 = book_list[l].title
+                if title1 > title2:
+                    temp = book_list[n]
+                    book_list[n] = book_list[l]
+                    book_list[l] = temp
+                l+=1
+            n+=1
+    
+    def sort_books_year(self, book_list):
+        n = 0
+        while n < len(book_list) -1:
+            l = n+1
+            while l < len(book_list):
+                param1 = book_list[n].year
+                param2 = book_list[l].year
+                if param1 == param2:
+                    param1 = book_list[n].title
+                    param2 = book_list[l].title
+                if param1 > param2:
+                    temp = book_list[n]
+                    book_list[n] = book_list[l]
+                    book_list[l] = temp
+                l+=1
+            n+=1
+        return book_list
+
+            
+
+
+
 
 
 if __name__ == "__main__":
