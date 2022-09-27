@@ -35,6 +35,7 @@ class Book:
         return self.title == other.title
 
 class BooksDataSource:
+
     def __init__(self, books_csv_file_name):
         ''' The books CSV file format looks like this:
 
@@ -49,6 +50,25 @@ class BooksDataSource:
             suitable instance variables for the BooksDataSource object containing
             a collection of Author objects and a collection of Book objects.
         '''
+        #Read each line of the .csv using a loop, and break down the data 
+        #create an Author object and a Book object for each line
+        #add object to appropriate list
+        file = open(books_csv_file_name)
+        csv_reader = csv.reader(file, delimiter=',')
+        for row in csv_reader:
+            print(row[0])
+        self.Authors = []
+        for row in csv_reader:
+            is_present = False
+            author = self.createAuthor(row)
+            book = self.createBook(row)
+            for other_author in self.Authors:
+                if author.__eq__(other_author):
+                    is_present = True
+            if not is_present:
+                self.Authors.append(author)
+
+        self.Books = []
         pass
 
     def authors(self, search_text=None):
@@ -85,4 +105,36 @@ class BooksDataSource:
             should be included.
         '''
         return []
+    
+    def searchList(self, datalist, parameter):
+        return[]
+    def createAuthor(self, row):
+        name_string = row[2]
+        mult_authors = name_string.split(' and ')
+        for name in mult_authors:
+            name_list = name.split(' ')
+            surname = name_list[len(name_list) - 2]
+            given_name = name_list[0]
+            n = 1
+            while n < len(name_list) - 2:
+                given_name = given_name + ' ' + name_list[n]
+                n+=1
+            range = name_list[len(name_list)-1]
+            range = range[1: len(range)-1]
+            year_list = range.split('-')
+            birth_year = year_list[0]
+            death_year = None
+            if year_list[1] != '':
+                death_year = year_list[1]
+            author = Author(surname,given_name,birth_year,death_year)
+        return author
 
+    def createBook(self, row):
+        title = row[0]
+        publish_year = row[1]
+
+        book = Book(title, publish_year, [])
+
+
+if __name__ == "__main__":
+    source = BooksDataSource("books1.csv")
