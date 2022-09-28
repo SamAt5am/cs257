@@ -55,8 +55,6 @@ class BooksDataSource:
         #add object to appropriate list
         file = open(books_csv_file_name)
         csv_reader = csv.reader(file, delimiter=',')
-        for row in csv_reader:
-            print(row[0])
         self.Authors = []
         self.Books = []
         for row in csv_reader:
@@ -65,19 +63,22 @@ class BooksDataSource:
             book = self.createBook(row, authorList)
             self.Books.append(book)
             for author in authorList:
-                for other_author in self.Authors:
-                    if author.__eq__(other_author):
-                        is_present = True
-                if not is_present:
+                if(self.Authors != None):
+                    for other_author in self.Authors:
+                        if author.__eq__(other_author):
+                            is_present = True
+                    if not is_present:
+                        self.Authors.append(author)
+                else:
                     self.Authors.append(author)
-        self.sortAuthors(self)
+        self.sortAuthors()
         pass
 
     def authors(self, search_text=None):
         search_result = []
         for author in self.Authors:
             full_name = author.given_name + ' ' + author.surname
-            if full_name.contains(search_text):
+            if search_text == None or (search_text) in full_name:
                 search_result.append(author)
         
         ''' Returns a list of all the Author objects in this data source whose names contain
@@ -100,8 +101,10 @@ class BooksDataSource:
                             or 'title', just do the same thing you would do for 'title')
         '''
         search_result = []
+
+       
         for book in self.Books:
-            if book.title.contains(search_text):
+            if search_text == None or search_text.lower() in book.title.lower():
                 search_result.append(book)
 
         if search_text == 'year':
@@ -129,8 +132,9 @@ class BooksDataSource:
             end_year = 1000000000
         bookList = self.sort_books_year(self.Books)
         for book in bookList:
-            if book.year >= start_year and book.year <= end_year:
+            if book.publication_year >= start_year and book.publication_year <= end_year:
                 results.append(book)
+        results = self.sort_books_title(results)
         return results
     
     def createAuthor(self, row):
@@ -159,10 +163,11 @@ class BooksDataSource:
 
     def createBook(self, row, author):
         title = row[0]
-        publish_year = row[1]
+        publish_year = int(row[1])
         authors = author
 
         book = Book(title, publish_year, authors)
+        return book
     
     def sortAuthors(self):
         n = 0
@@ -182,6 +187,7 @@ class BooksDataSource:
             n+=1
     
     def sort_books_title(self, book_list):
+        
         n = 0
         while n < len(book_list) -1:
             l = n+1
@@ -194,14 +200,15 @@ class BooksDataSource:
                     book_list[l] = temp
                 l+=1
             n+=1
+        return book_list
     
     def sort_books_year(self, book_list):
         n = 0
         while n < len(book_list) -1:
             l = n+1
             while l < len(book_list):
-                param1 = book_list[n].year
-                param2 = book_list[l].year
+                param1 = book_list[n].publication_year
+                param2 = book_list[l].publication_year
                 if param1 == param2:
                     param1 = book_list[n].title
                     param2 = book_list[l].title
