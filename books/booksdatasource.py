@@ -10,11 +10,12 @@
 import csv
 
 class Author:
-    def __init__(self, surname='', given_name='', birth_year=None, death_year=None):
+    def __init__(self, surname='', given_name='', birth_year=None, death_year=None, books = []):
         self.surname = surname
         self.given_name = given_name
         self.birth_year = birth_year
         self.death_year = death_year
+        self.books = books
 
     def __eq__(self, other):
         ''' For simplicity, we're going to assume that no two authors have the same name. '''
@@ -53,24 +54,27 @@ class BooksDataSource:
         #Read each line of the .csv using a loop, and break down the data 
         #create an Author object and a Book object for each line
         #add object to appropriate list
-        file = open(books_csv_file_name)
-        csv_reader = csv.reader(file, delimiter=',')
-        self.Authors = []
-        self.Books = []
-        for row in csv_reader:
-            is_present = False
-            authorList = self.createAuthor(row)
-            book = self.createBook(row, authorList)
-            self.Books.append(book)
-            for author in authorList:
-                if(self.Authors != None):
-                    for other_author in self.Authors:
-                        if author.__eq__(other_author):
-                            is_present = True
-                    if not is_present:
+        
+        with open(books_csv_file_name) as file:
+            csv_reader = csv.reader(file, delimiter=',')
+            self.Authors = []
+            self.Books = []
+            for row in csv_reader:
+                is_present = False
+                authorList = self.createAuthor(row)
+                book = self.createBook(row, authorList)
+                self.Books.append(book)
+                for author in authorList:
+                    author.books.append(book)
+                    if(self.Authors != None):
+                        for other_author in self.Authors:
+                            if author.__eq__(other_author):
+                                is_present = True
+                                other_author.books.append(book)
+                        if not is_present:
+                            self.Authors.append(author)
+                    else:
                         self.Authors.append(author)
-                else:
-                    self.Authors.append(author)
         self.sortAuthors()
         pass
 
@@ -156,7 +160,7 @@ class BooksDataSource:
             death_year = None
             if year_list[1] != '':
                 death_year = year_list[1]
-            author = Author(surname,given_name,birth_year,death_year)
+            author = Author(surname,given_name,birth_year,death_year,[])
             authorList.append(author)
 
         return authorList
