@@ -26,7 +26,7 @@ class Book:
         ''' Note that the self.authors instance variable is a list of
             references to Author objects. '''
         self.title = title
-        self.publication_year = publication_year
+        self.publication_year = int(publication_year)
         self.authors = authors
 
     def __eq__(self, other):
@@ -79,6 +79,7 @@ class BooksDataSource:
         pass
 
     def authors(self, search_text=None):
+        print(search_text)
         search_result = []
         for author in self.Authors:
             full_name = author.given_name + ' ' + author.surname
@@ -90,6 +91,7 @@ class BooksDataSource:
             returns all of the Author objects. In either case, the returned list is sorted
             by surname, breaking ties using given name (e.g. Ann Brontë comes before Charlotte Brontë).
         '''
+        print(search_result[0].given_name)
         return search_result
 
     def books(self, search_text=None, sort_by='title'):
@@ -111,7 +113,7 @@ class BooksDataSource:
             if search_text == None or search_text.lower() in book.title.lower():
                 search_result.append(book)
 
-        if search_text == 'year':
+        if sort_by == 'year':
             search_result = self.sort_books_year(search_result)
         else:
             search_result = self.sort_books_title(search_result)
