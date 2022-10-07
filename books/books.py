@@ -1,3 +1,8 @@
+'''
+   books.py
+   Sam Hiken and Barry Nwike 9/24/22
+   revised 10/6
+'''
 
 import booksdatasource
 import sys
@@ -11,17 +16,17 @@ def main():
         parameter1 = input[2]
         if(len(input)>3):
             parameter2 = input[3]
-    dataSource = booksdatasource.BooksDataSource("books1.csv")
-    if(command == "--author"):
-        list = dataSource.authors(parameter1)
+    data_source = booksdatasource.BooksDataSource("books1.csv")
+    if(command == "author"):
+        list = data_source.authors(parameter1)
         display_author(list)
-    elif command == "--book":
+    elif command == "book":
         if (parameter1 != '-n'):
-            display_book(dataSource.books(parameter1, parameter2))
+            display_book(data_source.books(parameter1, parameter2))
         else:
-            display_book(dataSource.books(None, parameter2))
+            display_book(data_source.books(None, parameter2))
 
-    elif command == "--book_yby":
+    elif command == "book_yby":
         if((parameter1 != None and parameter1.isnumeric()) or (parameter2 != None and parameter2.isnumeric())):
             if(parameter1 != None and parameter1.isnumeric()):
                 parameter1 = int(parameter1)
@@ -31,9 +36,9 @@ def main():
                 parameter2 = int(parameter2)
             else:
                 parameter2 = None
-            display_book(dataSource.sort_books_year(dataSource.books_between_years(parameter1, parameter2)))
+            display_book(data_source.sort_books_year(data_source.books_between_years(parameter1, parameter2)))
         else:
-            display_book(dataSource.sort_books_year(dataSource.Books))
+            display_book(data_source.sort_books_year(data_source.Books))
             
     else:
         file = open('usage.txt')

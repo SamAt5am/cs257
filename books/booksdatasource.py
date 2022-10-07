@@ -5,6 +5,10 @@
 
     For use in the "books" assignment at the beginning of Carleton's
     CS 257 Software Design class, Fall 2022.
+
+    Edited by Sam Hiken and Barry Nwike, 9/24
+
+    Revised 10/6
 '''
 
 import csv
@@ -61,8 +65,8 @@ class BooksDataSource:
             self.Books = []
             for row in csv_reader:
                 is_present = False
-                authorList = self.createAuthor(row)
-                book = self.createBook(row, authorList)
+                authorList = self.create_author(row)
+                book = self.create_book(row, authorList)
                 self.Books.append(book)
                 for author in authorList:
                     author.books.append(book)
@@ -75,23 +79,21 @@ class BooksDataSource:
                             self.Authors.append(author)
                     else:
                         self.Authors.append(author)
-        self.sortAuthors()
-        pass
+        
+        self.sort_authors()
 
     def authors(self, search_text=None):
-        print(search_text)
-        search_result = []
-        for author in self.Authors:
-            full_name = author.given_name + ' ' + author.surname
-            if search_text == None or (search_text) in full_name:
-                search_result.append(author)
-        
         ''' Returns a list of all the Author objects in this data source whose names contain
             (case-insensitively) the search text. If search_text is None, then this method
             returns all of the Author objects. In either case, the returned list is sorted
             by surname, breaking ties using given name (e.g. Ann Brontë comes before Charlotte Brontë).
         '''
-        print(search_result[0].given_name)
+        search_result = []
+        for author in self.Authors:
+            full_name = author.given_name + ' ' + author.surname
+            if search_text == None or (search_text.lower()) in full_name.lower():
+                search_result.append(author)
+        
         return search_result
 
     def books(self, search_text=None, sort_by='title'):
@@ -107,8 +109,7 @@ class BooksDataSource:
                             or 'title', just do the same thing you would do for 'title')
         '''
         search_result = []
-
-       
+      
         for book in self.Books:
             if search_text == None or search_text.lower() in book.title.lower():
                 search_result.append(book)
@@ -143,7 +144,7 @@ class BooksDataSource:
         results = self.sort_books_title(results)
         return results
     
-    def createAuthor(self, row):
+    def create_author(self, row):
         name_string = row[2]
         mult_authors = name_string.split(' and ')
         authorList = []
@@ -167,7 +168,7 @@ class BooksDataSource:
 
         return authorList
 
-    def createBook(self, row, author):
+    def create_book(self, row, author):
         title = row[0]
         publish_year = int(row[1])
         authors = author
@@ -175,7 +176,7 @@ class BooksDataSource:
         book = Book(title, publish_year, authors)
         return book
     
-    def sortAuthors(self):
+    def sort_authors(self):
         n = 0
         while n < len(self.Authors)-1:
             l = n+1
@@ -227,10 +228,5 @@ class BooksDataSource:
         return book_list
 
             
-
-
-
-
-
 if __name__ == "__main__":
     source = BooksDataSource("books1.csv")

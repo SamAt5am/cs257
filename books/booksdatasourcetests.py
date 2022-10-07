@@ -3,6 +3,7 @@
    Jeff Ondich, 24 September 2021
 
    modified by Sam Hiken and Barry Nwike 9/24
+   revised 10/6
 '''
 
 from booksdatasource import Author, Book, BooksDataSource
@@ -51,7 +52,6 @@ class BooksDataSourceTester(unittest.TestCase):
 	def test_bookData_getAuthor(self):
 		tiny_data_source = BooksDataSource('tinybooks.csv')
 		writers = tiny_data_source.authors("man")
-		print(len(writers))
 		self.assertTrue(len(writers) == 2)
 		self.assertTrue('man' in writers[0].surname)
 		self.assertTrue("man" in writers[1].given_name)
@@ -74,9 +74,9 @@ class BooksDataSourceTester(unittest.TestCase):
 		data_source = BooksDataSource('books1.csv')
 		authors = data_source.authors('Bront')
 		len(authors)
-		ann = Author('Ann', 'Brontë', 1820, 1849)
-		charlotte = Author('Charlotte', 'Brontë', 1816, 1855)
-		emily = Author('Emily,' 'Brontë', 1818, 1848)
+		ann = Author('Brontë', 'Ann', 1820, 1849)
+		charlotte = Author('Brontë', 'Charlotte', 1816, 1855)
+		emily = Author('Brontë', 'Emily', 1818, 1848)
 		self.assertTrue(len(authors) == 3)
 		self.assertTrue(authors[0].__eq__(ann))
 		self.assertTrue(authors[1].__eq__(charlotte))
@@ -87,14 +87,11 @@ class BooksDataSourceTester(unittest.TestCase):
 		authors = data_source.authors()
 		self.assertTrue(authors[0].surname[0] < authors[1].surname[0])
 		self.assertTrue(authors[1].surname[0] < authors[2].surname[0])
-		#Could work but only if there are no overlapping first letters
 
 	def test_same_publication_year(self):
 		tiny_data_source = BooksDataSource('books1.csv')
 		books = tiny_data_source.books_between_years(2010,2010)
 		self.assertTrue(books[0].title < books[1].title)
-
-
 
 if __name__ == '__main__':
 	unittest.main()
