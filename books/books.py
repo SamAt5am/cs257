@@ -1,25 +1,26 @@
 '''
    books.py
    Sam Hiken and Barry Nwike 9/24/22
-   revised 10/6
+   revised by Sam Hiken 10/7
 '''
 
 import booksdatasource
 import sys
 
 def main():
-    input = sys.argv
-    command = input[1]
+    command = sys.argv[1]
     parameter1 = None
     parameter2 = None
-    if(len(input) > 2):
-        parameter1 = input[2]
-        if(len(input)>3):
-            parameter2 = input[3]
+    if(len(sys.argv) > 2):
+        parameter1 = sys.argv[2]
+        if(len(sys.argv)>3):
+            parameter2 = sys.argv[3]
     data_source = booksdatasource.BooksDataSource("books1.csv")
+    
     if(command == "author"):
         list = data_source.authors(parameter1)
         display_author(list)
+
     elif command == "book":
         if (parameter1 != '-n'):
             display_book(data_source.books(parameter1, parameter2))
@@ -62,7 +63,6 @@ def display_author(authorList):
 def print_author_books(author):
     book_string = ""
     for book in author.books:
-        
         book_string = book_string + "\n" + book.title
         
     print(book_string[1:]+"\n")

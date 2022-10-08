@@ -8,7 +8,7 @@
 
     Edited by Sam Hiken and Barry Nwike, 9/24
 
-    Revised 10/6
+    Revised by Sam Hiken 10/7
 '''
 
 import csv
@@ -24,6 +24,12 @@ class Author:
     def __eq__(self, other):
         ''' For simplicity, we're going to assume that no two authors have the same name. '''
         return self.surname == other.surname and self.given_name == other.given_name
+    
+    def __lt__(self, other):
+        if self.surname == other.surname:
+            return self.given_name < other.given_name
+        else:
+            return self.surname < other.surname
 
 class Book:
     def __init__(self, title='', publication_year=None, authors=[]):
@@ -55,20 +61,16 @@ class BooksDataSource:
             suitable instance variables for the BooksDataSource object containing
             a collection of Author objects and a collection of Book objects.
         '''
-        #Read each line of the .csv using a loop, and break down the data 
-        #create an Author object and a Book object for each line
-        #add object to appropriate list
-        
         with open(books_csv_file_name) as file:
             csv_reader = csv.reader(file, delimiter=',')
             self.Authors = []
             self.Books = []
             for row in csv_reader:
                 is_present = False
-                authorList = self.create_author(row)
-                book = self.create_book(row, authorList)
+                author_list = self.create_author(row)
+                book = self.create_book(row, author_list)
                 self.Books.append(book)
-                for author in authorList:
+                for author in author_list:
                     author.books.append(book)
                     if(self.Authors != None):
                         for other_author in self.Authors:
@@ -80,7 +82,8 @@ class BooksDataSource:
                     else:
                         self.Authors.append(author)
         
-        self.sort_authors()
+        #self.sort_authors()
+        self.Authors = sorted(self.Authors)
 
     def authors(self, search_text=None):
         ''' Returns a list of all the Author objects in this data source whose names contain
@@ -115,9 +118,9 @@ class BooksDataSource:
                 search_result.append(book)
 
         if sort_by == 'year':
-            search_result = self.sort_books_year(search_result)
+            search_result = sorted(search_result, key= lambda book:book.publication_year)
         else:
-            search_result = self.sort_books_title(search_result)
+            search_result = sorted(search_result, key= lambda book:book.title)
 
         return search_result
 
@@ -147,7 +150,7 @@ class BooksDataSource:
     def create_author(self, row):
         name_string = row[2]
         mult_authors = name_string.split(' and ')
-        authorList = []
+        author_list = []
         for name in mult_authors:
             name_list = name.split(' ')
             surname = name_list[len(name_list) - 2]
@@ -164,9 +167,9 @@ class BooksDataSource:
             if year_list[1] != '':
                 death_year = year_list[1]
             author = Author(surname,given_name,birth_year,death_year,[])
-            authorList.append(author)
+            author_list.append(author)
 
-        return authorList
+        return author_list
 
     def create_book(self, row, author):
         title = row[0]
@@ -176,57 +179,5 @@ class BooksDataSource:
         book = Book(title, publish_year, authors)
         return book
     
-    def sort_authors(self):
-        n = 0
-        while n < len(self.Authors)-1:
-            l = n+1
-            while l < len(self.Authors):
-                name1 = self.Authors[n].surname
-                name2 = self.Authors[l].surname
-                if  name1 == name2:
-                    name1 = self.Authors[n].given_name
-                    name2 = self.Authors[l].given_name 
-                if name1 > name2:
-                    temp = self.Authors[n]
-                    self.Authors[n] = self.Authors[l]
-                    self.Authors[l] = temp
-                l+=1
-            n+=1
-    
-    def sort_books_title(self, book_list):
-        
-        n = 0
-        while n < len(book_list) -1:
-            l = n+1
-            while l < len(book_list):
-                title1 = book_list[n].title
-                title2 = book_list[l].title
-                if title1 > title2:
-                    temp = book_list[n]
-                    book_list[n] = book_list[l]
-                    book_list[l] = temp
-                l+=1
-            n+=1
-        return book_list
-    
-    def sort_books_year(self, book_list):
-        n = 0
-        while n < len(book_list) -1:
-            l = n+1
-            while l < len(book_list):
-                param1 = book_list[n].publication_year
-                param2 = book_list[l].publication_year
-                if param1 == param2:
-                    param1 = book_list[n].title
-                    param2 = book_list[l].title
-                if param1 > param2:
-                    temp = book_list[n]
-                    book_list[n] = book_list[l]
-                    book_list[l] = temp
-                l+=1
-            n+=1
-        return book_list
-
-            
 if __name__ == "__main__":
     source = BooksDataSource("books1.csv")

@@ -3,7 +3,7 @@
    Jeff Ondich, 24 September 2021
 
    modified by Sam Hiken and Barry Nwike 9/24
-   revised 10/6
+   revised by Sam Hiken 10/7
 '''
 
 from booksdatasource import Author, Book, BooksDataSource
