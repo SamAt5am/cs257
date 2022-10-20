@@ -1,0 +1,20 @@
+
+olympics.py Manual
+
+Sam Hiken, 10/20/22
+
+NAME
+  python3 olympics.py - performs queries on a postgres database of olympics records. 
+
+SYNOPSIS
+  python3 olympics.py names <noc>
+  python3 olympics.py nocs_golds
+  python3 olympics.py athletes_medals
+  python3 olympics.py --help | -h
+ 
+DESCRIPTION
+  Options: 
+	names <noc>: prints list of athletes who have competed at the olympics for noc
+	nocs_golds: prints list of NOCs by number of golds won
+	athletes_medals: prints list of athletes by number of medals won
+	--help | -h: prints usage.text
