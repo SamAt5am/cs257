@@ -1,0 +1,93 @@
+/*
+Mockups for Web Application
+Sam Hiken and James Brink 
+
+Jeff Ondich
+3 November 2022
+*/
+
+/* ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;  
+}
+    
+li {
+    float: left;
+}
+    
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+    
+li a:hover {
+    background-color: #111;
+}  */
+
+.intro {
+    font-size: 50pt;
+}
+
+
+
+
+
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    
+}
+  
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    float: left;
+    background-color: #333;
+    width: 15%
+}
+  
+li a:hover {
+    background-color: #111;
+}
+  
+b:hover {
+    background-color:grey;
+    transition: 0.1s;
+}
+  
+li b {
+    background-color: #eee; /* White background */
+    border: 1px solid black; /* Black border */
+    color: black; /* Black text */
+    padding: 10px 24px; /* Some padding */
+    cursor: pointer; /* Pointer/hand icon */
+    width: 40%; /* Set a width */
+    display: block; /* Make the buttons appear below each other */
+    width: 80%;
+    float: left;
+    clear: left;
+}
+
+.column {
+    float: left;
+    width: 50%;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+  
