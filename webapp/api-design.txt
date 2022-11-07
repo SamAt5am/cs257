@@ -1,0 +1,65 @@
+Sam Hiken and James Brink
+
+REQUEST: /clues
+
+GET parameters
+	search_text (Optional, default: '') -- return only clues whose clue_text contains search_text, case-insensitively
+
+RESPONSE: a JSON list of dictionaries, each of which represents a clue. The list is sorted by frequency. Each dictionary in the list has the following fields:
+
+	clue_text -- (string) the text of the clue
+	frequency -- (integer) the number of times the clue has appeared in crossword puzzles
+	answers -- (array of strings) array of answers that correspond to the clue
+
+
+REQUEST: /answers
+
+GET parameters
+	search_text (Optional, default: '') -- return only answers that contain search_text, case-insensitively
+
+RESPONSE: a JSON list of dictionaries, each of which represents a clue. The list is sorted by frequency. Each dictionary in the list has the following fields:
+
+	answer_text -- (string) the text of the answer
+	frequency -- (int) the number of times the answer has appeared in crossword puzzles
+	clues -- (array of strings) array of clues that correspond to the answer
+
+
+REQUEST: /authors
+
+GET parameters
+	search_text (Optional, default: '') -- return only authors whose names contain search_text, case-insensitively
+
+RESPONSE: a JSON list of dictionaries, each of which represents an author. The list is sorted by the number of puzzles written by the author. Each dictionary in the list has the following fields:
+	
+	name -- (string) the name of the author
+	puzzle_num -- (int) the number of puzzles written by the author
+	puzzle_ids -- (array of strings) array of puzzle titles corresponding to puzzles written by the author
+
+		
+REQUEST: /puzzles
+
+GET parameters
+	title_text (Optional, default: 'Untitled') -- returns puzzles whose title contains title_text
+	authors_text (Optional, default: '') -- returns puzzles with at least one author whose name contains author_text, case-insensitively
+	start_date (Optional, default: -infty) -- returns puzzles published after start date
+	end_date (Optional, default: -infty) -- returns puzzles published before end date
+	publisher_text (Optional, default: 'new york times') -- returns puzzles published by publisher_text
+	
+
+RESPONSE: a JSON list of dictionaries, each of which represents a puzzle. The list is sorted by the date published, with more recent puzzles appearing first. Each dictionary in the list has the following fields:
+
+	title -- (string) the title of the puzzle
+	authors -- (array of strings) the authors of the puzzle
+	date -- (string) the date the puzzle was released
+	publisher -- (string) the publisher of the puzzle
+
+REQUEST: /year
+
+GET parameters
+	start_year (Optional, default: -infty) -- returns only years after start_year
+	end_year (Optional, default: infty) -- returns only years before end_year
+
+RESPONSE: a JSON list of dictionaries, each of which represents a year. The list is sorted by the year, with more recent years appearing first. Each dictionary in the list has the following fields:
+
+	year -- (int) a year in the range specified by the query
+	most_popular_words -- (array of strings) the most popular words in year
