@@ -1,0 +1,65 @@
+/*
+style.css
+Sam Hiken and James Brink 
+*/
+
+.intro {
+    font-size: 50pt;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    
+}
+  
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    float: left;
+    background-color: #333;
+    width: 15%
+}
+  
+li a:hover {
+    background-color: #111;
+}
+  
+b:hover {
+    background-color:grey;
+    transition: 0.1s;
+}
+  
+li b {
+    background-color: #eee; 
+    border: 1px solid black; 
+    color: black; 
+    padding: 10px 24px; 
+    cursor: pointer; 
+    width: 40%; 
+    display: block; 
+    width: 80%;
+    float: left;
+    clear: left;
+}
+
+table, th, td {
+    border: 1px solid;
+}
+
+.column {
+    float: left;
+    width: 50%;
+}
+
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}

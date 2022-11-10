@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
+    <script type="text/javascript" src="{{ url_for('static', filename='crosswords.js') }}" ></script>
+    <title>Crossword Crunch</title>
+</head>
+
+    <h2> 
+        Crossword Crunch
+    </h2>
+
+<body>
+    <ul>
+        <li><a href="#Home">Home</a></li>
+        <li><a href="#Clues">Clue Search</a></li>
+        <li><a href="#Answer">Answer Search</a></li>
+        <li><a href="#Author">Author Search</a></li>
+        <li><a href="#Statisitics">Crossword Statisics</a></li>
+    </ul>
+
+    <p>
+        Hi Jeff! This is just one page of our website; we don't have it hooked up to our other pages yet. However, if you click the button below, it should give you a list of clue-answer pairs that we have in an abridged version of our database.
+    </p>
+
+    <p><button id="clues_button">Get clues</button></p>
+    <p><table id="clue_table"></table></p>
+
+</body>
+</html>
