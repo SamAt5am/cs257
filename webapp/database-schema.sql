@@ -1,27 +1,20 @@
 CREATE TABLE clues (
     id integer NOT NULL,
-    clue text);
+    clue text,
+    def text,
+    number text);
 
 CREATE TABLE answers (
     id integer NOT NULL,
     answer text);
 
-CREATE TABLE clues_answers_years (
+CREATE TABLE clues_answers_puzzles (
     clue_id integer,
     answer_id integer,
-    year integer,
-    times_used_in_year integer);
-
-CREATE TABLE authors (
-    author_id integer,
-    name text);
+    puzzle_id integer);
 
 CREATE TABLE puzzles (
-    puzzle_id integer,
+    puzzle_id integer NOT NULL,
     title text,
-    publisher text,
+    source text,
     date text);
-
-CREATE TABLE authors_puzzles (
-    author_id integer,
-    puzzle_id integer);

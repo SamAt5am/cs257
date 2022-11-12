@@ -17,37 +17,46 @@ answers_dict = dict()
 authors_dict = dict()
 puzzles_dict = dict()
 
-clues_answers_years_list = list()
+clues_answers_puzzles_list = list()
 
 # create dictionaries connecting tuples to ids, create linking list
-with open('crossword_data_mini.csv', newline = '') as csv_input:
+with open('data.csv', newline = '') as csv_input:
     reader = csv.reader(csv_input, delimiter=',')
     next(reader)
     for row in reader:
-        clue = row[3]
-        answer = row[2]
-        year = row[1]
+        clue_text = row[1]
+        answer_text = row[2]
+        definition = row[3]
+        clue_number = row[4]
+        date = row[5]
+        title = row[6]
+        source = row[8]
 
-        if clue not in clues_dict:
-            clues_dict[clue] = len(clues_dict)
-        if answer not in answers_dict:
-            answers_dict[answer] = len(answers_dict)
+        clue_id = len(clues_dict)
 
-        clues_answers_years_list.append([clues_dict[clue],
-                            answers_dict[answer],
-                            # here, we're assuming that each clue-answer pair appears no more than 
-                            # once per year; this is true for our small dataset, but we will fix it in a 
-                            # future draft
-                            int(year),1])
+        clue_info = [clue_id,clue_text,definition,clue_number]
+        
+        clues_dict[clue_text] = clue_info
+        if answer_text not in answers_dict:
+            answers_dict[answer_text] = len(answers_dict)
+        if title not in puzzles_dict:
+            puzzles_dict[title] = [len(puzzles_dict),title,source,date]
+
+        clues_answers_puzzles_list.append([clue_id,
+                            answers_dict[answer_text],
+                            puzzles_dict[title][0]])
 
 clues_list = []
 answers_list = []
+puzzles_list = []
 
 # convert dictionaries to lists with ids
 for clue in clues_dict:
-    clues_list.append([clues_dict[clue],clue])
+    clues_list.append(clues_dict[clue])
 for answer in answers_dict:
     answers_list.append([answers_dict[answer],answer])
+for title in puzzles_dict:
+    puzzles_list.append(puzzles_dict[title])
 
 # helper method for writing list to rows of csv
 def write_to_csv(file_name, data_list):
@@ -58,4 +67,5 @@ def write_to_csv(file_name, data_list):
 
 write_to_csv('clues.csv', clues_list)
 write_to_csv('answers.csv', answers_list)
-write_to_csv('clues_answers_years.csv', clues_answers_years_list)
+write_to_csv('puzzles.csv', puzzles_list)
+write_to_csv('clues_answers_puzzles.csv', clues_answers_puzzles_list)
