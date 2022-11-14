@@ -26,7 +26,7 @@ function onCluesButtonCicked() {
     
     var url = getAPIBaseURL() + '/clues/';
 
-    // Send the request to the Books API /authors/ endpoint
+    // Send the request to the Crosswords API /authors/ endpoint
     fetch(url, {method: 'get'})
 
     // When the results come back, transform them from a JSON string into
