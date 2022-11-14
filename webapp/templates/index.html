@@ -15,30 +15,33 @@
     <title>Crossword Crunch</title>
 </head>
 
-    <h2> 
+    <h1> 
         Crossword Crunch
-    </h2>
+        <img src="static/crunch_logo.png" alt="logo" width="30" height="30">
+    </h1>
 
 <body>
     <ul>
-        <li><a href="#Home">Home</a></li>
-        <li><a href="#About"></a></li>
+        <li><a href="{{ url_for('templates', filename='index.html') }}">Home</a></li>
+        <li><a href="#About">About</a></li>
     </ul>
-
-    <label for="opt-select">Choose what you want to search:</label>
-
-    <select name="search-select" id="search-select">
-        <option value="">----</option>
-        <option value="clue">Clue</option>
-        <option value="answer">Answer</option>
-    </select>
-
+    
     <p>
+        <label for="opt-select">Choose what you want to search:</label>
+
+        <select name="search-select" id="search-select">
+            <option value="">----</option>
+            <option value="clue">Clue</option>
+            <option value="answer">Answer</option>
+        </select>
+
         <input id="search-box" type="text" />
         <button id="search-button">Search</button>
     </p>
 
     <p><button id="clues_button">Get clues</button></p>
+
+    <p><table id="answer_table"></table></p>
     <p><table id="clue_table"></table></p>
 
 </body>
