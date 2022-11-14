@@ -22,14 +22,20 @@
 <body>
     <ul>
         <li><a href="#Home">Home</a></li>
-        <li><a href="#Clues">Clue Search</a></li>
-        <li><a href="#Answer">Answer Search</a></li>
-        <li><a href="#Author">Author Search</a></li>
-        <li><a href="#Statisitics">Crossword Statisics</a></li>
+        <li><a href="#About"></a></li>
     </ul>
 
+    <label for="opt-select">Choose what you want to search:</label>
+
+    <select name="search-select" id="search-select">
+        <option value="">----</option>
+        <option value="clue">Clue</option>
+        <option value="answer">Answer</option>
+    </select>
+
     <p>
-        Hi Jeff! This is just one page of our website; we don't have it hooked up to our other pages yet. However, if you click the button below, it should give you a list of clue-answer pairs that we have in an abridged version of our database.
+        <input id="search-box" type="text" />
+        <button id="search-button">Search</button>
     </p>
 
     <p><button id="clues_button">Get clues</button></p>
