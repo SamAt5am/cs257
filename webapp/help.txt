@@ -1,0 +1,60 @@
+Sam Hiken and James Brink
+
+REQUEST: /clues
+
+GET parameters
+	search_text (Optional, default: '') -- return only clues whose clue text contains search_text, case sensitively (will make this case insensitive for final product)
+
+RESPONSE: a JSON list of dictionaries, each of which represents an instance of an answer in a puzzle. The list is sorted alphabetically by clue text. Each dictionary in the list has the following fields:
+
+	clue_id -- (integer) integer we assign in the database to each clue
+	clue -- (string) text of the clue
+	answer -- (string) text of the answer corresponding to the clue
+
+EXAMPLE:
+	/clues/water%20bottle
+	[{"clue_id": 49652, "clue": "Is youth able to find water bottle? (7)", "answer": "CANTEEN"}, 
+	{"clue_id": 6074, "clue": "Little point in end of winter hot water bottles (7)", "answer": "PRICKLE"}, 
+	{"clue_id": 164416, "clue": "Drink at 18? Put down water bottles (5)", "answer": "ERECT"}, {"clue_id": 583893, "clue": "Eliot carrying that woman\u2019s second hot water bottle (7)", "answer": "THERMOS"}, 
+	{"clue_id": 164416, "clue": "Drink at 18? Put down water bottles (5)", "answer": "PEKOE"}]
+
+
+
+REQUEST: /answers
+
+GET parameters
+	search_text (Optional, default: '') -- return only answers whose answer text contains search_text, case insensitively
+
+RESPONSE: a JSON list of dictionaries, each of which represents an instance of an answer in a puzzle. The list is sorted alphabetically by the answer text, then by the text of the corresponding clue. Each dictionary in the list has the following fields:
+
+	answer_id -- (integer) integer we assign in the database to each answer
+	answer -- (string) text of the answer
+	clue -- (string) text of the clue corresponding to this instance of the answer
+
+EXAMPLE:
+	/answers/brouhahas
+	[{"answer_id": 41032, "answer": "BROUHAHAS", "clue": "Relative laughing about upper-class outrages (9)"}, 
+	{"answer_id": 41032, "answer": "BROUHAHAS", "clue": "Telling of beer jokes brings uproars (9)"}]
+
+
+
+REQUEST: /puzzles
+
+GET parameters
+	clue_id (Optional, default: '') -- return puzzle that has the clue with id clue_id
+	answer_id (Optional, default: '') -- return all puzzles that have the answer with id answer_id
+	
+RESPONSE: a JSON list of dictionaries, each of which represents an instance of a puzzle. The list is sorted alphabetically by title, which usually consists of the publication name and the number of puzzles published by the institution. Each dictionary in the list has the following fields:
+
+	puzzle_id -- (integer) integer we assign in the database to each puzzle
+	title -- (string) title of the puzzle
+	source -- (string) online source for the puzzle
+	date -- (string) date the puzzle was run
+
+EXAMPLES:
+	/puzzles/clue/257
+	[{"puzzle_id": 9, "title": "Quick Cryptic Number 397", "source": "times_xwd_times", "date": "2015-09-16"}]
+
+	/puzzles/answer/41032
+	[{"puzzle_id": 19468, "title": "Cru Cryptic ***", "source": "cru_cryptics", "date": ""}, 
+	{"puzzle_id": 2793, "title": "Sunday Times Cryptic 4883,", "source": "times_xwd_times", "date": "2020-01-04"}]

@@ -24,14 +24,15 @@ def get_connection():
 @api.route('/clues/<search_text>') 
 def get_clues(search_text):
     ''' 
-    Returns the list of all answers
+    Returns the list of all clues matching search texrt
     '''
     like_clause = '%' + search_text + '%'
     query = '''SELECT clues_answers_puzzles.clue_id, clues.clue, answers.answer
     FROM clues, answers, clues_answers_puzzles
     WHERE clues.clue LIKE CONCAT('%%', %s, '%%')
     AND clues.id = clues_answers_puzzles.clue_id
-    AND answers.id = clues_answers_puzzles.answer_id;
+    AND answers.id = clues_answers_puzzles.answer_id
+    ORDER BY clues.clue, answers.answer;
     '''
 
     clue_list = []
@@ -56,14 +57,15 @@ def get_clues(search_text):
 @api.route('/answers/<search_text>') 
 def get_answers(search_text):
     ''' 
-    Returns the list of all answers
+    Returns the list of all answers matching search text
     '''
     like_clause = '%' + search_text.upper() + '%'
     query = '''SELECT clues_answers_puzzles.answer_id, answers.answer, clues.clue
     FROM clues, answers, clues_answers_puzzles
     WHERE answers.answer LIKE CONCAT('%%', %s, '%%')
     AND clues.id = clues_answers_puzzles.clue_id
-    AND answers.id = clues_answers_puzzles.answer_id;
+    AND answers.id = clues_answers_puzzles.answer_id
+    ORDER BY answers.answer, clues.clue;
     '''
 
     answer_list = []
@@ -94,7 +96,8 @@ def get_puzzles_by_clue(clue_id):
     query = '''SELECT puzzles.puzzle_id, puzzles.title, puzzles.source, puzzles.date
     FROM puzzles, clues_answers_puzzles
     WHERE clues_answers_puzzles.clue_id = %s
-    AND clues_answers_puzzles.puzzle_id = puzzles.puzzle_id;
+    AND clues_answers_puzzles.puzzle_id = puzzles.puzzle_id
+    ORDER BY puzzles.title;
     '''
 
     puzzle_list = []
@@ -125,7 +128,8 @@ def get_puzzles_by_answer(answer_id):
     query = '''SELECT puzzles.puzzle_id, puzzles.title, puzzles.source, puzzles.date
     FROM puzzles, clues_answers_puzzles
     WHERE clues_answers_puzzles.answer_id = %s
-    AND clues_answers_puzzles.puzzle_id = puzzles.puzzle_id;
+    AND clues_answers_puzzles.puzzle_id = puzzles.puzzle_id
+    ORDER BY puzzles.title;
     '''
 
     puzzle_list = []
@@ -147,3 +151,13 @@ def get_puzzles_by_answer(answer_id):
         print(e, file=sys.stderr)
 
     return json.dumps(puzzle_list)
+
+
+@api.route('/help')
+def get_help():
+    f = open('help.txt')
+    lines = f.readlines()
+    help_text = ''
+    for line in lines:
+        help_text += (line + '\\n')
+    return help_text

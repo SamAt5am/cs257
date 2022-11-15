@@ -22,9 +22,14 @@
 
 <body>
     <ul>
-        <li><a href="{{ url_for('templates', filename='index.html') }}">Home</a></li>
-        <li><a href="#About">About</a></li>
+        <li><a href="{{url_for('home')}}">Home</a></li>
+        <li><a href="{{url_for('dates')}}">Search by Date</a></li>      
+        <li><a href="{{url_for('about')}}">About</a></li>      
     </ul>
+    
+    <p>
+       Welcome to CROSSWORD CRUNCH!!! Use feature below to search for clues and answers in cryptic crossword puzzles!
+    </p>
     
     <p>
         <label for="opt-select">Choose what you want to search:</label>
@@ -39,10 +44,8 @@
         <button id="search-button">Search</button>
     </p>
 
-    <p><button id="clues_button">Get clues</button></p>
-
-    <p><table id="answer_table"></table></p>
-    <p><table id="clue_table"></table></p>
+    <h3 id="search-result"></h3>
+    <p><table id="results_table"></table></p>
 
 </body>
 </html>

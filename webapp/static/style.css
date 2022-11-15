@@ -3,10 +3,6 @@ style.css
 Sam Hiken and James Brink 
 */
 
-.intro {
-    font-size: 50pt;
-}
-
 ul {
     list-style-type: none;
     margin: 0;
@@ -34,32 +30,13 @@ b:hover {
     background-color:grey;
     transition: 0.1s;
 }
-  
-li b {
-    background-color: #eee; 
-    border: 1px solid black; 
-    color: black; 
-    padding: 10px 24px; 
-    cursor: pointer; 
-    width: 40%; 
-    display: block; 
-    width: 80%;
-    float: left;
-    clear: left;
+
+
+table {
+    border-collapse: collapse;
 }
 
-table, th, td {
+th, td {
     border: 1px solid;
-}
-
-.column {
-    float: left;
-    width: 50%;
-}
-
-
-.row:after {
-    content: "";
-    display: table;
-    clear: both;
+    padding: 10px;
 }

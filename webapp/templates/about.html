@@ -1,0 +1,53 @@
+<!--
+    index.html
+    Sam Hiken and James Brink
+    
+    9 November 2022
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
+    <title>Crossword Crunch</title>
+</head>
+
+    <h1> 
+        Crossword Crunch
+        <img src="static/crunch_logo.png" alt="logo" width="30" height="30">
+    </h1>
+
+<body>
+    <ul>
+        <li><a href="{{url_for('home')}}">Home</a></li>
+        <li><a href="{{url_for('dates')}}">Search by Date</a></li>      
+        <li><a href="{{url_for('about')}}">About</a></li>      
+    </ul>
+
+    <p>
+        A cryptic crossword puzzle is a variation on the classic crossword, but with extra tricky clues!
+    </p>
+
+    <p>
+        While the standard New York Times-style crossword is more popular in the US, cryptic crosswords are more popular overseas. In a cryptic crossword, clues take on a very particular structure:
+    </p>
+
+    <p>
+        One part of the clue is a literal definition of the intended answer. The other part is a super elaborate pun meant to hint at the answer. Consider the following clue, which appeared in a 2019 puzzle from the New York Times Magazine:
+    </p>
+
+    <p>
+        "Not up to par, truant soldier retreats into drink (5,7)"
+    </p>
+
+    <p>
+        The answer is BELOWAVERAGE. "Not up to par" is a literal clue for BELOWAVERAGE. However, the rest of the clue is far more devious. A truant soldier can be described as "AWOL", and "drink" is another word for "beverage." If we insert the acronym AWOL backwards into the word BEVERAGE, we get BELOWAVERAGE, so a truant soldier is "retreating into drink."
+    </p>
+
+    <p>
+        Fun!
+    </p>
+</body>
+</html>

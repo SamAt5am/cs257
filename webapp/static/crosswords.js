@@ -32,19 +32,16 @@ function onSearchButtonClick() {
     console.log(searchSelect.value)
 
     if (searchSelect.value == "answer") {
-        console.log("checking answers...")
         onAnswersSearch(searchElement.value)
     }
     else if (searchSelect.value == "clue") {
-        console.log("checking clues...")
         onCluesSearch(searchElement.value)
     }
     
 }
-function onAnswersSearch(searchTest) {
+function onAnswersSearch(searchText) {
 
-    console.log("checking API for: " + searchTest);
-    var url = getAPIBaseURL() + '/answers/' + searchTest;
+    var url = getAPIBaseURL() + '/answers/' + searchText;
 
     // Send the request to the Crosswords API /authors/ endpoint
     fetch(url, {method: 'get'})
@@ -58,16 +55,28 @@ function onAnswersSearch(searchTest) {
     .then(function(answerList) {
         // Build the table body.
         var tableBody = '';
+
+        var searchResult = document.getElementById('search-result');
+        searchResult.innerHTML = "Showing results for: " + '"' + searchText + '"';
+
+        const answersCheck = [];
         for (var k = 0; k < answerList.length; k++) {
+            
+            if(answersCheck.includes(answerList[k]['answer']) == false) {
+                tableBody += '<tr>'
+                tableBody += '<td><a onclick="getPuzzleFromAnswer(' + answerList[k]['answer_id']+ ",'"
+                + answerList[k]['answer']  + "','"
+                + answerList[k]['clue'] 
+                + "')\">"
+                + answerList[k]['answer']
+                + '</a></td></tr>';
 
-            tableBody += '<tr>';
-            tableBody += '<td>' +  answerList[k]['answer'] + '</td>';
-            tableBody += '<td>' +  answerList[k]['clue'] + '</td>';
-            tableBody += '</tr>';
+                answersCheck.push(answerList[k]['answer'])
+            }
         }
 
         // Put the table body we just built inside the table that's already on the page.
-        var resultsTableElement = document.getElementById('answer_table');
+        var resultsTableElement = document.getElementById('results_table');
         if (resultsTableElement) {
             resultsTableElement.innerHTML = tableBody;
         }
@@ -80,10 +89,9 @@ function onAnswersSearch(searchTest) {
 
 }
 
-function onCluesSearch(searchTest) {
+function onCluesSearch(searchText) {
 
-    console.log("checking API for: " + searchTest);
-    var url = getAPIBaseURL() + '/clues/' + searchTest;
+    var url = getAPIBaseURL() + '/clues/' + searchText;
 
     // Send the request to the Crosswords API /authors/ endpoint
     fetch(url, {method: 'get'})
@@ -97,19 +105,26 @@ function onCluesSearch(searchTest) {
     .then(function(clueList) {
         // Build the table body.
         var tableBody = '';
-        for (var k = 0; k < clueList.length; k++) {
 
-            tableBody += '<tr>';
-            tableBody += '<td>' +  clueList[k]['clue'] + '</td>';
-            tableBody += '<td>' +  clueList[k]['answer'] + '</td>';
-            tableBody += '</tr>';
+        var searchResult = document.getElementById('search-result');
+        searchResult.innerHTML = "Showing results for: " + '"' + searchText + '"';
+
+        for (var k = 0; k < clueList.length; k++) {
+            tableBody += '<tr><td><a onclick="getPuzzleFromClue(' + clueList[k]['clue_id']+ ",'"
+                + clueList[k]['clue']  + "','"
+                + clueList[k]['answer'] 
+                + "')\">"
+                + clueList[k]['clue']
+                + '</a></td></tr>';
+
         }
 
         // Put the table body we just built inside the table that's already on the page.
-        var resultsTableElement = document.getElementById('clue_table');
+        var resultsTableElement = document.getElementById('results_table');
         if (resultsTableElement) {
             resultsTableElement.innerHTML = tableBody;
         }
+        console.log(tableBody);
     })
 
     // Log the error if anything went wrong during the fetch.
@@ -119,108 +134,30 @@ function onCluesSearch(searchTest) {
 
 }
 
-
-/*
-function onCluesButtonCicked() {
-    
-    var url = getAPIBaseURL() + '/clues/';
-
-    // Send the request to the Crosswords API /authors/ endpoint
-    fetch(url, {method: 'get'})
-
-    // When the results come back, transform them from a JSON string into
-    // a Javascript object (in this case, a list of author dictionaries).
-    .then((response) => response.json())
-
-    // Once you have your list of author dictionaries, use it to build
-    // an HTML table displaying the author names and lifespan.
-    .then(function(clueList) {
-        // Build the table body.
-        var tableBody = '';
-        for (var k = 0; k < clueList.length; k++) {
-
-            tableBody += '<tr>';
-            tableBody += '<td>' +  clueList[k]['clue'] + '</td>';
-            tableBody += '<td>' +  clueList[k]['answer'] + '</td>';
-            tableBody += '</tr>';
-        }
-
-        // Put the table body we just built inside the table that's already on the page.
-        var resultsTableElement = document.getElementById('clue_table');
-        if (resultsTableElement) {
-            resultsTableElement.innerHTML = tableBody;
-        }
-    })
-
-    // Log the error if anything went wrong during the fetch.
-    .catch(function(error) {
-        console.log(error);
-    });
-
-}
-
-
-
-
-function onCluesButtonCicked() {
-    
-    var url = getAPIBaseURL() + '/clues/';
-
-    // Send the request to the Crosswords API /authors/ endpoint
-    fetch(url, {method: 'get'})
-
-    // When the results come back, transform them from a JSON string into
-    // a Javascript object (in this case, a list of author dictionaries).
-    .then((response) => response.json())
-
-    // Once you have your list of author dictionaries, use it to build
-    // an HTML table displaying the author names and lifespan.
-    .then(function(clueList) {
-        // Build the table body.
-        var tableBody = '';
-        for (var k = 0; k < clueList.length; k++) {
-
-            tableBody += '<tr>';
-            tableBody += '<td>' +  clueList[k]['clue'] + '</td>';
-            tableBody += '<td>' +  clueList[k]['answer'] + '</td>';
-            tableBody += '</tr>';
-        }
-
-        // Put the table body we just built inside the table that's already on the page.
-        var resultsTableElement = document.getElementById('clue_table');
-        if (resultsTableElement) {
-            resultsTableElement.innerHTML = tableBody;
-        }
-    })
-
-    // Log the error if anything went wrong during the fetch.
-    .catch(function(error) {
-        console.log(error);
-    });
-
-}
-
-
-
-function getClue(clueID, clueName) {
-
+function getPuzzleFromClue(clueID, clueName, answer) {
     // Very similar pattern to onAuthorsButtonClicked, so I'm not
     // repeating those comments here. Read through this code
     // and see if it makes sense to you.
-    var url = getAPIBaseURL() + '/clues/' + authorID;
+
+    console.log("getPuzzleFromClue invoked!");
+    var url = getAPIBaseURL() + '/puzzles/clue/' + clueID;
 
     fetch(url, {method: 'get'})
 
     .then((response) => response.json())
 
-    .then(function(clueList) {
-        var tableBody = '<tr><th>' + clueName + '</th></tr>';
-        for (var k = 0; k < clueList.length; k++) {
-            tableBody += '<tr>';
-            tableBody += '<td>' + clueList[k]['clue'] + '</td>';
-            tableBody += '</tr>';
+    .then(function(puzzleList) {
+        var tableBody = '<table>'
+        tableBody = '<tr><td>' + '<b>' + clueName + '</b></td></tr>'
+
+        for (var k = 0; k < puzzleList.length; k++) {
+            tableBody += '<tr><td>' + 'Answer: ' + answer + ' </td></tr>';
+            tableBody += '<tr><td>' + 'Title: <i> ' + puzzleList[k]['title'] + '</i>' + '</td></tr>';
+            tableBody += '<tr><td>' + puzzleList[k]['date'] + '</td></tr>';
+            tableBody += '<tr><td>' + 'Source/Creator:' + puzzleList[k]['source'] + '</td></tr>';
+            tableBody += '</table>';
         }
-        var resultsTableElement = document.getElementById('clue_table');
+        var resultsTableElement = document.getElementById('results_table');
         if (resultsTableElement) {
             resultsTableElement.innerHTML = tableBody;
         }
@@ -231,4 +168,39 @@ function getClue(clueID, clueName) {
     });
 }
 
-*/
+function getPuzzleFromAnswer(answerID, answerName, clue) {
+    // Very similar pattern to onAuthorsButtonClicked, so I'm not
+    // repeating those comments here. Read through this code
+    // and see if it makes sense to you.
+
+    console.log("getPuzzleFromClue invoked!");
+    var url = getAPIBaseURL() + '/puzzles/answer/' + answerID;
+
+    fetch(url, {method: 'get'})
+
+    .then((response) => response.json())
+
+    .then(function(puzzleList) {
+
+
+        var tableBody = '<table>'
+        tableBody = '<tr><td>' + '<b><u>' + answerName + '</b></u></td></tr>'
+
+        for (var k = 0; k < puzzleList.length; k++) {
+            tableBody += '<tr><td><b>' + k + '.' + '</b></td></tr>';
+            tableBody += '<tr><td>' + 'Clue: ' + clue + ' </td></tr>';
+            tableBody += '<tr><td>' + 'Title: <i> ' + puzzleList[k]['title'] + '</i>' + '</td></tr>';
+            tableBody += '<tr><td>' + puzzleList[k]['date'] + '</td></tr>';
+            tableBody += '<tr><td>' + 'Source/Creator:' + puzzleList[k]['source'] + '</td></tr>';
+            tableBody += '</table>';
+        }
+        var resultsTableElement = document.getElementById('results_table');
+        if (resultsTableElement) {
+            resultsTableElement.innerHTML = tableBody;
+        }
+    })
+
+    .catch(function(error) {
+        console.log(error);
+    });
+}
