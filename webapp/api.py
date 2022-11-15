@@ -87,29 +87,63 @@ def get_answers(search_text):
     return json.dumps(answer_list)
 
 @api.route('/puzzles/clue/<clue_id>') 
-def get_puzzles(start_date,end_date):
+def get_puzzles_by_clue(clue_id):
     ''' 
     Returns the list of all puzzles
     '''
     query = '''SELECT puzzles.puzzle_id, puzzles.title, puzzles.source, puzzles.date
-    FROM answers;
+    FROM puzzles, clues_answers_puzzles
+    WHERE clues_answers_puzzles.clue_id = %s
+    AND clues_answers_puzzles.puzzle_id = puzzles.puzzle_id;
     '''
 
-    clue_list = []
+    puzzle_list = []
     try:
         connection = get_connection()
         cursor = connection.cursor()
-        cursor.execute(query, tuple())
+        cursor.execute(query, (int(clue_id),))
         for row in cursor:
-            clue = {
-            'clue':row[0],
-            'answer':row[1],
-            'clues_answers_year':row[2]
+            puzzle = {
+            'puzzle_id':row[0],
+            'title':row[1],
+            'source':row[2],
+            'date':row[3]
             }
-            clue_list.append(clue)
+            puzzle_list.append(puzzle)
         cursor.close()
         connection.close()
     except Exception as e:
         print(e, file=sys.stderr)
-        
-    return json.dumps(clue_list)
+
+    return json.dumps(puzzle_list)
+
+@api.route('/puzzles/answer/<answer_id>') 
+def get_puzzles_by_answer(answer_id):
+    ''' 
+    Returns the list of all puzzles
+    '''
+    query = '''SELECT puzzles.puzzle_id, puzzles.title, puzzles.source, puzzles.date
+    FROM puzzles, clues_answers_puzzles
+    WHERE clues_answers_puzzles.answer_id = %s
+    AND clues_answers_puzzles.puzzle_id = puzzles.puzzle_id;
+    '''
+
+    puzzle_list = []
+    try:
+        connection = get_connection()
+        cursor = connection.cursor()
+        cursor.execute(query, (int(answer_id),))
+        for row in cursor:
+            puzzle = {
+            'puzzle_id':row[0],
+            'title':row[1],
+            'source':row[2],
+            'date':row[3]
+            }
+            puzzle_list.append(puzzle)
+        cursor.close()
+        connection.close()
+    except Exception as e:
+        print(e, file=sys.stderr)
+
+    return json.dumps(puzzle_list)
