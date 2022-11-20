@@ -152,6 +152,38 @@ def get_puzzles_by_answer(answer_id):
 
     return json.dumps(puzzle_list)
 
+@api.route('/puzzles/dates/<start_date>/<end_date>') 
+def get_puzzles_by_answer(start_date,end_date):
+    ''' 
+    Returns the list of all puzzles
+    '''
+    query = '''SELECT puzzles.puzzle_id, puzzles.title, puzzles.source, puzzles.date
+    FROM puzzles
+    WHERE clues_answers_puzzles.answer_id = %s
+    AND clues_answers_puzzles.puzzle_id = puzzles.puzzle_id
+    ORDER BY puzzles.title;
+    '''
+
+    puzzle_list = []
+    try:
+        connection = get_connection()
+        cursor = connection.cursor()
+        cursor.execute(query, (int(answer_id),))
+        for row in cursor:
+            puzzle = {
+            'puzzle_id':row[0],
+            'title':row[1],
+            'source':row[2],
+            'date':row[3]
+            }
+            puzzle_list.append(puzzle)
+        cursor.close()
+        connection.close()
+    except Exception as e:
+        print(e, file=sys.stderr)
+
+    return json.dumps(puzzle_list)
+
 
 @api.route('/help')
 def get_help():

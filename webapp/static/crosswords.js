@@ -204,3 +204,35 @@ function getPuzzleFromAnswer(answerID, answerName, clue) {
         console.log(error);
     });
 }
+
+function getPuzzlesFromDate(startDate, endDate) {
+    // Very similar pattern to onAuthorsButtonClicked, so I'm not
+    // repeating those comments here. Read through this code
+    // and see if it makes sense to you.
+
+    console.log("getPuzzlesFromDate invoked!");
+    var url = getAPIBaseURL() + '/puzzles/dates/' + startDate + '/' + endDate;
+
+    fetch(url, {method: 'get'})
+
+    .then((response) => response.json())
+
+    .then(function(puzzleList) {
+
+        var tableBody = '<table>'
+        tableBody = '<tr><td>' + '<b><u>' + answerName + '</b></u></td></tr>'
+
+        for (var k = 0; k < puzzleList.length; k++) {
+            tableBody += '<tr><td><b>' + k + '.' + '</b></td></tr>';
+            tableBody += '<tr><td>' + 'Title: <i> ' + puzzleList[k]['title'] + '</i>' + '</td></tr>';
+        }
+        var resultsTableElement = document.getElementById('results_table');
+        if (resultsTableElement) {
+            resultsTableElement.innerHTML = tableBody;
+        }
+    })
+
+    .catch(function(error) {
+        console.log(error);
+    });
+}

@@ -28,15 +28,25 @@
         <li><a href="{{url_for('about')}}">About</a></li>      
     </ul>
     
-    <p class = "intro">
-        Welcome to <b>Crossword Crunch</b>! A place to research cryptic crossword <i>clues</i> and <i>answers</i>!
-        <br>
-        Please select what you would like to search from the buttons above! 
-        <br>
-        <br>
-        <b><i>Happy crunching!</i></b>
-
+    <p>
+       Welcome to CROSSWORD CRUNCH!!! Use feature below to search for clues and answers in cryptic crossword puzzles!
     </p>
+    
+    <p>
+        <label for="opt-select">Choose what you want to search:</label>
+
+        <select name="search-select" id="search-select">
+            <option value="">----</option>
+            <option value="clue">Clue</option>
+            <option value="answer">Answer</option>
+        </select>
+
+        <input id="search-box" type="text" />
+        <button id="search-button">Search</button>
+    </p>
+
+    <h3 id="search-result"></h3>
+    <p><table id="results_table"></table></p>
 
 </body>
 </html>

@@ -16,6 +16,10 @@ app.register_blueprint(api.api, url_prefix='/api')
 def home():
     return flask.render_template('index.html')
 
+@app.route('/clues_answers') 
+def clues_answers():
+    return flask.render_template('clues_answers.html')
+
 @app.route('/dates') 
 def dates():
     return flask.render_template('dates.html')

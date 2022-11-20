@@ -22,12 +22,21 @@
 <body>
     <ul>
         <li><a href="{{url_for('home')}}">Home</a></li>
+        <li><a href="{{url_for('clues_answers')}}">Search for Clues and Answers</a></li>      
         <li><a href="{{url_for('dates')}}">Search by Date</a></li>      
         <li><a href="{{url_for('about')}}">About</a></li>      
     </ul>
 
-    <p>
-        We plan on implementing a feature that allows users to search for puzzles by date. We may also offer functionality that allows users to look at the frequency of answers over time.
-    </p>
+    <form action="/action_page.php">
+        <label for="start_date">Start Date:</label>
+        <input type="date" id="start_date" name="start_date">
+        <label for="end_date">End Date:</label>
+        <input type="date" id="end_date" name="end_date">
+        <button type="submit" id="get_puzzles" name="get_puzzles">
+        <label for="get_puzzles">Get Puzzles</label>
+        <button type="submit" id="get_answers" name="get_answers">
+        <label for="get_answers">Get Answers</label>
+    </form>
+
 </body>
 </html>
