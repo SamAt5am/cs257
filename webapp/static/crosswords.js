@@ -1,7 +1,7 @@
 /*
  * crosswords.js
  * Sam Hiken and James Brink
- * For assignment due 9 Nov 2022
+ * For final project due 21 Nov 2022
  */
 
 window.onload = initialize;
@@ -44,7 +44,7 @@ function onAnswersSearch(searchText) {
     fetch(url, {method: 'get'})
 
     // When the results come back, transform them from a JSON string into
-    // a Javascript object (in this case, a list of author dictionaries).
+    // a Javascript object (in this case, a list of answer dictionaries).
     .then((response) => response.json())
 
     // Once you have your list of author dictionaries, use it to build
@@ -102,11 +102,11 @@ function onCluesSearch(searchText) {
     fetch(url, {method: 'get'})
 
     // When the results come back, transform them from a JSON string into
-    // a Javascript object (in this case, a list of author dictionaries).
+    // a Javascript object (in this case, a list of clue dictionaries).
     .then((response) => response.json())
 
-    // Once you have your list of author dictionaries, use it to build
-    // an HTML table displaying the author names and lifespan.
+    // Once we have our list of dictionaries, we use it to build
+    // an HTML table displaying the clue texts.
     .then(function(clueList) {
         // Build the table body.
         var tableBody = '';
@@ -144,18 +144,14 @@ function onCluesSearch(searchText) {
 }
 
 function getPuzzleFromClue(clueID, clueName, answer) {
-    // Very similar pattern to onAuthorsButtonClicked, so I'm not
-    // repeating those comments here. Read through this code
-    // and see if it makes sense to you.
 
-    console.log("getPuzzleFromClue invoked!");
     var url = getAPIBaseURL() + '/puzzles/clue/' + clueID;
-
 
     fetch(url, {method: 'get'})
 
     .then((response) => response.json())
 
+    // Build an HTML table displaying info about the puzzle that contained clueID
     .then(function(puzzleList) {
         var tableBody = '<table>'
         tableBody = '<tr><td>' + '<b>' + clueName + '</b></td></tr>'
@@ -182,17 +178,16 @@ function getPuzzleFromClue(clueID, clueName, answer) {
 }
 
 function getPuzzleFromAnswer(answerID, answerName) {
-    // Very similar pattern to onAuthorsButtonClicked, so I'm not
-    // repeating those comments here. Read through this code
-    // and see if it makes sense to you.
 
     console.log("getPuzzleFromClue invoked!");
+
     var url = getAPIBaseURL() + '/puzzles/answer/' + answerID;
 
     fetch(url, {method: 'get'})
 
     .then((response) => response.json())
 
+    // Build an HTML table displaying info about the puzzles that contain answerID
     .then(function(puzzleList) {
 
         var tableBody = '<table>'
@@ -218,17 +213,14 @@ function getPuzzleFromAnswer(answerID, answerName) {
 }
 
 function getPuzzlesFromDate(startDate, endDate) {
-    // Very similar pattern to onAuthorsButtonClicked, so I'm not
-    // repeating those comments here. Read through this code
-    // and see if it makes sense to you.
-
-    console.log("getPuzzlesFromDate invoked!");
+    
     var url = getAPIBaseURL() + '/puzzles/dates/' + startDate + '/' + endDate;
 
     fetch(url, {method: 'get'})
 
     .then((response) => response.json())
 
+    // Build table listing titles of puzzles published between startDate and endDate
     .then(function(puzzleList) {
 
         var tableBody = '<table>'

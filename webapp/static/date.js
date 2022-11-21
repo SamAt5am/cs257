@@ -1,5 +1,5 @@
 /*
- * crosswords.js
+ * data.js
  * Sam Hiken and James Brink
  * For assignment due 9 Nov 2022
  */
@@ -26,16 +26,13 @@ function getAPIBaseURL() {
 function onSearchButtonClick() {
     console.log('Search Button clicked!')
     
-    // var searchSelect = document.getElementById('search-select');
     var startElement = document.getElementById('start_date');
     var endElement = document.getElementById('end_date');
 
     reformatDate(startElement.value);
 
-    // if (searchSelect.value == 'puzzles') {
     onDateSearch(reformatDate(startElement.value), 
     reformatDate(endElement.value));
-    // }
     
 }
 
@@ -56,11 +53,11 @@ function onDateSearch(startText, endText) {
 
     var url = getAPIBaseURL() + '/puzzles/dates/' + startText + '/' + endText;
 
-    // Send the request to the Crosswords API /authors/ endpoint
+    // Send the request to the Crosswords API /date/ endpoint
     fetch(url, {method: 'get'})
 
     // When the results come back, transform them from a JSON string into
-    // a Javascript object (in this case, a list of author dictionaries).
+    // a Javascript object (in this case, a list of dictionaries).
     .then((response) => response.json())
 
     // Once we have our list of puzzle dictionaries, we use it to build
@@ -77,6 +74,7 @@ function onDateSearch(startText, endText) {
         if(puzzleList == 0) {
             searchResult.innerHTML = "No results from: " + startText + " to " + endText + '.';
         }
+        // Yes search results found! Build a table:
         else {
             searchResult.innerHTML = "Showing results from: " + startText + " to " + endText + '.';
 
@@ -106,16 +104,14 @@ function onDateSearch(startText, endText) {
 }
 
 function getPuzzleFromAnswer(puzzleID, puzzleTitle, puzzleDate) {
-    // Very similar pattern to onAuthorsButtonClicked, so I'm not
-    // repeating those comments here. Read through this code
-    // and see if it makes sense to you.
-
+    
     var url = getAPIBaseURL() + '/clues_answers/puzzle/' + puzzleID;
 
     fetch(url, {method: 'get'})
 
     .then((response) => response.json())
 
+    // Builds table of clue-answer pairs from puzzle id
     .then(function(clueList) {
 
         var tableBody = '<table>'
