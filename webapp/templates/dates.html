@@ -11,6 +11,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
+    <script type="text/javascript" src="{{ url_for('static', filename='date.js') }}" ></script>
     <title>Crossword Crunch</title>
 </head>
 
@@ -26,17 +27,22 @@
         <li><a href="{{url_for('dates')}}">Search by Date</a></li>      
         <li><a href="{{url_for('about')}}">About</a></li>      
     </ul>
+    <p>
+        Select two dates using the tool below. We will display a list of all cryptic crosswords published between those two dates; you can click on one to get a list of the clues and answers from that puzzle!
+    </p>    
 
     <form action="/action_page.php">
         <label for="start_date">Start Date:</label>
         <input type="date" id="start_date" name="start_date">
         <label for="end_date">End Date:</label>
         <input type="date" id="end_date" name="end_date">
-        <button type="submit" id="get_puzzles" name="get_puzzles">
-        <label for="get_puzzles">Get Puzzles</label>
-        <button type="submit" id="get_answers" name="get_answers">
-        <label for="get_answers">Get Answers</label>
     </form>
+
+    <button id="search-button">Search</button>
+
+    <h3 id="search-result"></h3>
+    <p><table id="results_table"></table></p>
+
 
 </body>
 </html>

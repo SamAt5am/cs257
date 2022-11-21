@@ -7,11 +7,8 @@
 window.onload = initialize;
 
 function initialize() {
-
     var button = document.getElementById('search-button');
     button.onclick = onSearchButtonClick;
-    //let element = document.getElementById('clues_button');
-    //element.onclick = onCluesButtonCicked;
 }
 
 // Returns the base URL of the API, onto which endpoint
@@ -53,29 +50,37 @@ function onAnswersSearch(searchText) {
     // Once you have your list of author dictionaries, use it to build
     // an HTML table displaying the author names and lifespan.
     .then(function(answerList) {
-        // Build the table body.
+
+        // Initialize table html string
         var tableBody = '';
 
+        // Initialize search result text
         var searchResult = document.getElementById('search-result');
-        searchResult.innerHTML = "Showing results for: " + '"' + searchText + '"';
+        
+        // No search results found.
+        if(answerList == 0) {
+            searchResult.innerHTML = "No results found for:" + '"' + searchText + '"' + ' Try a different search!';
+        }
+        else {
+            searchResult.innerHTML = "Showing results for: " + '"' + searchText + '"';
 
-        const answersCheck = [];
-        for (var k = 0; k < answerList.length; k++) {
-            
-            if(answersCheck.includes(answerList[k]['answer']) == false) {
-                tableBody += '<tr>'
-                tableBody += '<td><a onclick="getPuzzleFromAnswer(' + answerList[k]['answer_id']+ ",'"
-                + answerList[k]['answer']  + "','"
-                + answerList[k]['clue'] 
-                + "')\">"
-                + answerList[k]['answer']
-                + '</a></td></tr>';
-
-                answersCheck.push(answerList[k]['answer'])
+            const answersCheck = [];
+            for (var k = 0; k < answerList.length; k++) {
+                
+                // Checking to see if answer is already in table
+                if(answersCheck.includes(answerList[k]['answer']) == false) {
+                    tableBody += '<tr>'
+                    tableBody += '<td><a onclick="getPuzzleFromAnswer(' + answerList[k]['answer_id']+ ",'"
+                    + answerList[k]['answer']
+                    + "')\">"
+                    + answerList[k]['answer']
+                    + '</a></td></tr>';    
+                    answersCheck.push(answerList[k]['answer'])
+                }
             }
         }
 
-        // Put the table body we just built inside the table that's already on the page.
+        // Put the table body into the html
         var resultsTableElement = document.getElementById('results_table');
         if (resultsTableElement) {
             resultsTableElement.innerHTML = tableBody;
@@ -107,18 +112,22 @@ function onCluesSearch(searchText) {
         var tableBody = '';
 
         var searchResult = document.getElementById('search-result');
-        searchResult.innerHTML = "Showing results for: " + '"' + searchText + '"';
-
-        for (var k = 0; k < clueList.length; k++) {
-            tableBody += '<tr><td><a onclick="getPuzzleFromClue(' + clueList[k]['clue_id']+ ",'"
-                + clueList[k]['clue']  + "','"
-                + clueList[k]['answer'] 
-                + "')\">"
-                + clueList[k]['clue']
-                + '</a></td></tr>';
-
+        if(clueList == 0) {
+            searchResult.innerHTML = "No results found for:" + '"' + searchText + '"' + ' Try a different search!';
         }
+        else {
+            searchResult.innerHTML = "Showing results for: " + '"' + searchText + '"';
 
+            for (var k = 0; k < clueList.length; k++) {
+                tableBody += '<tr><td><a onclick="getPuzzleFromClue(' + clueList[k]['clue_id']+ ",'"
+                    + clueList[k]['clue']  + "','"
+                    + clueList[k]['answer'] 
+                    + "')\">"
+                    + clueList[k]['clue']
+                    + '</a></td></tr>';
+
+            }
+        }
         // Put the table body we just built inside the table that's already on the page.
         var resultsTableElement = document.getElementById('results_table');
         if (resultsTableElement) {
@@ -142,6 +151,7 @@ function getPuzzleFromClue(clueID, clueName, answer) {
     console.log("getPuzzleFromClue invoked!");
     var url = getAPIBaseURL() + '/puzzles/clue/' + clueID;
 
+
     fetch(url, {method: 'get'})
 
     .then((response) => response.json())
@@ -153,10 +163,13 @@ function getPuzzleFromClue(clueID, clueName, answer) {
         for (var k = 0; k < puzzleList.length; k++) {
             tableBody += '<tr><td>' + 'Answer: ' + answer + ' </td></tr>';
             tableBody += '<tr><td>' + 'Title: <i> ' + puzzleList[k]['title'] + '</i>' + '</td></tr>';
-            tableBody += '<tr><td>' + puzzleList[k]['date'] + '</td></tr>';
+            tableBody += '<tr><td>' + puzzleList[k]['publication_date'] + '</i>' + '</td></tr>';
             tableBody += '<tr><td>' + 'Source/Creator:' + puzzleList[k]['source'] + '</td></tr>';
+            
             tableBody += '</table>';
+            console.log(puzzleList[k]['publication_date'])
         }
+    
         var resultsTableElement = document.getElementById('results_table');
         if (resultsTableElement) {
             resultsTableElement.innerHTML = tableBody;
@@ -168,7 +181,7 @@ function getPuzzleFromClue(clueID, clueName, answer) {
     });
 }
 
-function getPuzzleFromAnswer(answerID, answerName, clue) {
+function getPuzzleFromAnswer(answerID, answerName) {
     // Very similar pattern to onAuthorsButtonClicked, so I'm not
     // repeating those comments here. Read through this code
     // and see if it makes sense to you.
@@ -182,15 +195,14 @@ function getPuzzleFromAnswer(answerID, answerName, clue) {
 
     .then(function(puzzleList) {
 
-
         var tableBody = '<table>'
         tableBody = '<tr><td>' + '<b><u>' + answerName + '</b></u></td></tr>'
 
         for (var k = 0; k < puzzleList.length; k++) {
             tableBody += '<tr><td><b>' + k + '.' + '</b></td></tr>';
-            tableBody += '<tr><td>' + 'Clue: ' + clue + ' </td></tr>';
+            tableBody += '<tr><td>' + 'Clue: ' + puzzleList[k]['clue'] + ' </td></tr>';
             tableBody += '<tr><td>' + 'Title: <i> ' + puzzleList[k]['title'] + '</i>' + '</td></tr>';
-            tableBody += '<tr><td>' + puzzleList[k]['date'] + '</td></tr>';
+            tableBody += '<tr><td>' + puzzleList[k]['publication_date'] + '</i>' + '</td></tr>';
             tableBody += '<tr><td>' + 'Source/Creator:' + puzzleList[k]['source'] + '</td></tr>';
             tableBody += '</table>';
         }

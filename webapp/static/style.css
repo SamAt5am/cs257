@@ -26,12 +26,6 @@ li a:hover {
     background-color: #111;
 }
   
-b:hover {
-    background-color:grey;
-    transition: 0.1s;
-}
-
-
 table {
     border-collapse: collapse;
 }
@@ -39,4 +33,13 @@ table {
 th, td {
     border: 1px solid;
     padding: 10px;
+}
+
+td:hover {
+    background-color: yellow;
+    transition: 0.1s;
+}
+
+.noHover:hover {
+    
 }
