@@ -3,7 +3,7 @@ Sam Hiken and James Brink
 REQUEST: /clues
 
 GET parameters
-	search_text (Optional, default: '') -- return only clues whose clue text contains search_text, case sensitively (will make this case insensitive for final product)
+	search_text -- return only clues whose clue text contains search_text, case sensitively (will make this case insensitive for final product)
 
 RESPONSE: a JSON list of dictionaries, each of which represents an instance of an answer in a puzzle. The list is sorted alphabetically by clue text. Each dictionary in the list has the following fields:
 
@@ -23,9 +23,10 @@ EXAMPLE:
 REQUEST: /answers
 
 GET parameters
-	search_text (Optional, default: '') -- return only answers whose answer text contains search_text, case insensitively
+	search_text -- return only answers whose answer text contains search_text, case insensitively
+	start_date/end_date -- return only answers that appeared between start_date and end_date
 
-RESPONSE: a JSON list of dictionaries, each of which represents an instance of an answer in a puzzle. The list is sorted alphabetically by the answer text, then by the text of the corresponding clue. Each dictionary in the list has the following fields:
+RESPONSE: a JSON list of dictionaries, each of which represents an instance of an answer in a puzzle. If one searches by search_text, the list is sorted alphabetically by the answer text, then by the text of the corresponding clue. If one searches by date, the resulting list is sorted by the number of times an answer appeared in puzzles between those dates. Each dictionary in the list has the following fields:
 
 	answer_id -- (integer) integer we assign in the database to each answer
 	answer -- (string) text of the answer
@@ -36,15 +37,19 @@ EXAMPLE:
 	[{"answer_id": 41032, "answer": "BROUHAHAS", "clue": "Relative laughing about upper-class outrages (9)"}, 
 	{"answer_id": 41032, "answer": "BROUHAHAS", "clue": "Telling of beer jokes brings uproars (9)"}]
 
+	/answers/dates/'2010-05-05'/'2020-05-05'
+	[long list of answers listed here]
+
 
 
 REQUEST: /puzzles
 
 GET parameters
-	clue_id (Optional, default: '') -- return puzzle that has the clue with id clue_id
-	answer_id (Optional, default: '') -- return all puzzles that have the answer with id answer_id
+	clue_id -- return puzzle that has the clue with id clue_id
+	answer_id -- return all puzzles that have the answer with id answer_id
+	start_date/end_date -- return list of puzzles that were published between start_date and end_date
 	
-RESPONSE: a JSON list of dictionaries, each of which represents an instance of a puzzle. The list is sorted alphabetically by title, which usually consists of the publication name and the number of puzzles published by the institution. Each dictionary in the list has the following fields:
+RESPONSE: a JSON list of dictionaries, each of which represents an instance of a puzzle. If searching by clue_id or answer_id, the list is sorted alphabetically by title, which usually consists of the publication name and the number of puzzles published by the institution. If searching by date, the list is sorted by date. Each dictionary in the list has the following fields:
 
 	puzzle_id -- (integer) integer we assign in the database to each puzzle
 	title -- (string) title of the puzzle
@@ -58,3 +63,24 @@ EXAMPLES:
 	/puzzles/answer/41032
 	[{"puzzle_id": 19468, "title": "Cru Cryptic ***", "source": "cru_cryptics", "date": ""}, 
 	{"puzzle_id": 2793, "title": "Sunday Times Cryptic 4883,", "source": "times_xwd_times", "date": "2020-01-04"}]
+
+	/puzzles/dates/'2010-05-05'/'2020-05-05'
+	[the resulting list of puzzles is too long to list here]
+
+
+REQUEST: /clues_answers
+
+GET parameters
+	puzzle_id -- return list of clue answer pairs that appeared in puzzle with puzzle_id
+
+RESPONSE: a JSON list of dictionaries, each of which represents a clue-answer pair in a puzzle. The list is sorted alphabetically by 'clue number,' which is a string of the form 'xA' or 'xD', where x is an integer, and A or D represents whether the clue was 'across' or 'down.' Each dictionary in the list has the following fields:
+
+	clue_number -- (string) string representing the position of the clue in the puzzle
+	clue_id -- (integer) integer representing the clue in the database
+	clue -- (text) text of the clue
+	answer_id -- (integer) integer representing the answer in the database
+	answer -- (text) text of the integer
+
+EXAMPLES:
+	/clues_answers/puzzle/1
+	[{"clue_number": "10a", "clue_id": 30, "clue": "Concerned with small emergency arising once more (9)", "answer_id": 30, "answer": "RESURGENT"}, {"clue_number": "11a", "clue_id": 31, "clue": "Vouchsafed information about Roman square (5)", "answer_id": 31, "answer": "GIVEN"}, {"clue_number": "12a", "clue_id": 32, "clue": "Perfectionist maybe disposing of uranium to key operator (7)", "answer_id": 32, "answer": "PIANIST"}, ... [the list keeps going]]
